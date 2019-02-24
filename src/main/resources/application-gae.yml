@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: 'org.hibernate.dialect.MySQL5InnoDBDialect'
+        show_sql: 'true'
+        format_sql: 'true'
+  datasource:
+    driverClassName: 'com.mysql.jdbc.Driver'
+    url: 'jdbc:mysql://google/gae?cloudSqlInstance=gae-cloud-232418:us-central1:gae&socketFactory=com.google.cloud.sql.mysql.SocketFactory'
+    username: 'devGae'
+    password: '1qazwe321'
+    testWhileIdle: 'true'
+    validationQuery: 'SELECT 1'

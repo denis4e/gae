@@ -1,0 +1,119 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.3.RELEASE'
+        kotlin_version = '1.3.11'
+        groovy_version = '2.5.0'
+        appengineVersion = '1.9.59'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+        classpath "com.google.appengine:gradle-appengine-plugin:${appengineVersion}"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'net.ltgt.apt' version '0.9'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+apply plugin: 'appengine'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.gae'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
+    compile "org.codehaus.groovy:groovy-all:${groovy_version}"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    appengineSdk "com.google.appengine:appengine-java-sdk:${appengineVersion}"
+    compile 'javax.servlet:javax.servlet-api'
+    compile "com.google.appengine:appengine-api-1.0-sdk:${appengineVersion}"
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.15'
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '2.3.2'
+    compile group: 'com.google.cloud.sql', name: 'mysql-socket-factory', version: '1.0.12'
+
+    compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
+    compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.3.7.Final'
+
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.2'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+    compile "org.mapstruct:mapstruct-jdk8:1.3.0.Beta1"
+    compile "org.mapstruct:mapstruct-processor:1.3.0.Beta1"
+
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.6'
+    compile group: 'org.hibernate', name: 'hibernate-java8', version: '5.3.7.Final'
+
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task testSourcesJar(type: Jar) {
+    classifier = 'testSources'
+    from sourceSets.test.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar, testSourcesJar
+}
+
+// GAE defaults
+appengine {
+    httpPort = 8085
+    downloadSdk = true
+    warDir = new File("$project.projectDir" + '/build/exploded-war')
+
+    appcfg {
+        email = 'denis.sosulev@gmail.com'
+        passIn = true
+
+        logs {
+            severity = 1
+            outputFile = file('mylogs.txt')
+        }
+
+        app {
+            id = 'gae-cloud-232418'
+        }
+    }
+}
