@@ -1,3 +1,3 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--project=пфу', '--version=$SHORT_SHA']
+  args: ['app', 'deploy', '--project=gae-cloud-232418', '--version=$SHORT_SHA']
