@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/groovy")
 class ProfileController {
 
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/profile")
     def home(){
-       return "groovy home"
+       return "profile controller"
     }
 }
